@@ -67,6 +67,7 @@ public class AddBusinessCard extends ActionBarActivity {
                 card.fax = fax.getText().toString();
                 card.website = website.getText().toString();
                 card.imageUrl = imageUri;
+                finish();
             }
         });
     }
