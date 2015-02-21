@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,9 @@ public class AddBusinessCard extends ActionBarActivity {
         final EditText jobTitle = (EditText)findViewById(R.id.jobTitle);
         final EditText address = (EditText)findViewById(R.id.address);
         final EditText number = (EditText)findViewById(R.id.phoneNumber);
+        number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         final EditText fax = (EditText)findViewById(R.id.fax);
+        fax.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         final EditText website = (EditText)findViewById(R.id.website);
         final Button imageButton = (Button)findViewById(R.id.selectImageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {

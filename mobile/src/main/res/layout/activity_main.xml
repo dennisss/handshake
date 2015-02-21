@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/addBusinessCard"
-        android:text="Configure My Buisness Card"/>
+        android:text="Configure My Business Card"/>
 
     <TextView
         android:layout_width="wrap_content"

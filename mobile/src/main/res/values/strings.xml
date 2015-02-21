@@ -4,6 +4,6 @@
     <string name="app_name">Handshake</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_add_buisiness_card">AddBuisinessCard</string>
+    <string name="title_activity_add_business_card">AddBusinessCard</string>
 
 </resources>
