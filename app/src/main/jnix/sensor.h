@@ -1,5 +1,9 @@
 #include <jni.h>
 
+#include <vector>
+
+using namespace std;
+
 #ifndef SENSORS_H_
 #define SENSORS_H_
 
@@ -8,8 +12,13 @@ extern "C" {
 #endif
 
 
-void init_sensors();
+typedef void (*data_callback)(vector<double> sample);
+
+
+void init_sensors(data_callback f);
 void stop_sensors();
+
+
 
 #ifdef __cplusplus
 }
