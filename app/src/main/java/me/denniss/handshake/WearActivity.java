@@ -9,6 +9,8 @@ public class WearActivity extends Activity {
 
     private TextView mTextView;
 
+    private Gesture g = new Gesture();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,5 +22,21 @@ public class WearActivity extends Activity {
                 mTextView = (TextView) stub.findViewById(R.id.text);
             }
         });
+
+        Gesture g = new Gesture();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        g.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        g.stop();
     }
 }

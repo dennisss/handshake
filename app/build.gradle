@@ -14,11 +14,24 @@ android {
 
         ndk {
             moduleName "gesture"
-            //cFlags "-DANDROID_NDK -D_DEBUG DNULL=0"   // Define some macros
-            //ldLibs "EGL", "GLESv3", "dl", "log"       // Link with these libraries!
-            //stl "stlport_shared"
+            cFlags "-fexceptions -fpermissive -frtti -DANDROID_NDK -D_DEBUG -DNULL=0"
+            ldLibs "android",  "log"
+            stl "gnustl_shared"
         }
     }
+
+    sourceSets.main {
+        jni.srcDirs = ["src/main/jni", "../ext/grt/GRT"]
+    }
+
+    productFlavors {
+        arm {
+            ndk {
+                abiFilter "armeabi-v7a"
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
