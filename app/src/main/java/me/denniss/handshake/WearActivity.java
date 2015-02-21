@@ -9,7 +9,7 @@ public class WearActivity extends Activity {
 
     private TextView mTextView;
 
-    private Gesture g = new Gesture();
+    private Gesture g;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,20 +23,20 @@ public class WearActivity extends Activity {
             }
         });
 
-        Gesture g = new Gesture();
+        g = new Gesture(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        g.start();
+        g.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        g.stop();
+        g.pause();
     }
 }

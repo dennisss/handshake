@@ -11,25 +11,6 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-
-        ndk {
-            moduleName "gesture"
-            cFlags "-fexceptions -fpermissive -frtti -DANDROID_NDK -D_DEBUG -DNULL=0"
-            ldLibs "android",  "log"
-            stl "gnustl_shared"
-        }
-    }
-
-    sourceSets.main {
-        jni.srcDirs = ["src/main/jni", "../ext/grt/GRT"]
-    }
-
-    productFlavors {
-        arm {
-            ndk {
-                abiFilter "armeabi-v7a"
-            }
-        }
     }
 
     buildTypes {
