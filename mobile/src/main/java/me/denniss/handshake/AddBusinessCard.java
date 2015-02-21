@@ -19,7 +19,7 @@ import android.widget.ImageView;
 
 public class AddBusinessCard extends ActionBarActivity {
 
-    int PICK_IMAGE = 1;
+    private final int PICK_IMAGE = 1;
     String imageUri = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,20 @@ public class AddBusinessCard extends ActionBarActivity {
         fax.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         final EditText website = (EditText)findViewById(R.id.website);
         final Button imageButton = (Button)findViewById(R.id.selectImageButton);
+
+        BusinessCard card = (BusinessCard) getIntent().getSerializableExtra("card");
+        if (card != null) {
+            businessName.setText(card.businessName);
+            name.setText(card.name);
+            email.setText(card.email);
+            jobTitle.setText(card.jobTitle);
+            address.setText(card.address);
+            number.setText(card.number);
+            fax.setText(card.fax);
+            website.setText(card.website);
+            imageUri = card.imageUrl;
+        }
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +81,9 @@ public class AddBusinessCard extends ActionBarActivity {
                 card.fax = fax.getText().toString();
                 card.website = website.getText().toString();
                 card.imageUrl = imageUri;
+                Intent intent = new Intent();
+                intent.putExtra("card", card);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

@@ -11,6 +11,9 @@ import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity {
 
+    private BusinessCard mBusinessCard;
+    private final int PICK_CARD = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,9 +23,19 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),AddBusinessCard.class);
-                startActivity(i);
+                if (mBusinessCard != null) {
+                    i.putExtra("card", mBusinessCard);
+                }
+                startActivityForResult(i, PICK_CARD);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CARD && resultCode == RESULT_OK) {
+            mBusinessCard = (BusinessCard) data.getSerializableExtra("card");
+        }
     }
 
 
