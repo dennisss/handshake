@@ -1,12 +1,21 @@
 package me.denniss.handshake;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -18,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Button addCard = (Button)findViewById(R.id.addBusinessCard);
         addCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,12 +39,23 @@ public class MainActivity extends ActionBarActivity {
                 startActivityForResult(i, PICK_CARD);
             }
         });
+
+        List<BusinessCard> businessCards = Select.from(BusinessCard.class)
+                .where(Condition.prop("is_you").eq("1")).list();
+        if (businessCards.size() > 0) {
+            mBusinessCard = businessCards.get(0);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_CARD && resultCode == RESULT_OK) {
-            mBusinessCard = (BusinessCard) data.getSerializableExtra("card");
+            BusinessCard newCard = (BusinessCard) data.getSerializableExtra("card");
+            if (mBusinessCard == null)
+                mBusinessCard = newCard;
+            else
+                mBusinessCard.setCard(newCard);
+            mBusinessCard.save();
         }
     }
 
