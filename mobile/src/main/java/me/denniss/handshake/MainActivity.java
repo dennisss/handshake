@@ -37,8 +37,8 @@ public class MainActivity extends ActionBarActivity{
                 if (mBusinessCard != null) {
                     i.putExtra("card", mBusinessCard);
                 }
-                //startActivityForResult(i, PICK_CARD);
-                sendMessage(START_ACTIVITY,"RESPONSE");
+                startActivityForResult(i, PICK_CARD);
+                //sendMessage(START_ACTIVITY,"RESPONSE");
             }
         });
 
