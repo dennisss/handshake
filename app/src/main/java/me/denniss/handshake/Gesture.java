@@ -7,7 +7,7 @@ public class Gesture {
 
 
     static{
-        System.loadLibrary("gesture");
+        //System.loadLibrary("gesture");
     }
 
 }
