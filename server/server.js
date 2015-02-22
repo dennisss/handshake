@@ -10,9 +10,16 @@ var e = new EventEmitter();
 var data = {};
 var i = 0;
 
+var timeout = null;
+
 app.post('/shake', function (req, res) {
 
 	console.log('SHAKE')
+
+	if(timeout != null){
+		timeout = setTimeout(function(){ clearServer(); }, 4000);
+	}
+
 
 	var me = req.body.name + "";
 	data[me] = req.body;
@@ -44,6 +51,13 @@ app.post('/shake', function (req, res) {
 		sendother();
 	})
 })
+
+
+function clearServer(){
+	data = {};
+	timeout = null;
+	e.removeAllListeners('wake');
+}
 
 app.post('/echo', function(req, res){
 	res.send(req.body);
