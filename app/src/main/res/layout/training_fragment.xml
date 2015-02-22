@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/anchor"
         android:layout_centerHorizontal="true"
-        android:id="@+id/wearListeningButton"
+        android:id="@+id/selectAppButton"
         android:text="Select Action"/>
 
 </RelativeLayout>

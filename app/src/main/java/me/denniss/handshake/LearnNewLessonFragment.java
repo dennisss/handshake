@@ -1,6 +1,7 @@
 package me.denniss.handshake;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ public class LearnNewLessonFragment extends Fragment{
 
     TextView currentGesture;
     int curGestureIndex = 0;
-    private Button startTraining,arrowLeft,arrowRight;
+    private Button startTraining,arrowLeft,arrowRight, selectApp;
 
 
     @Override
@@ -33,7 +34,15 @@ public class LearnNewLessonFragment extends Fragment{
         arrowLeft = (Button)parentView.findViewById(R.id.gestureLeftButton);
         arrowRight = (Button)parentView.findViewById(R.id.gestureRightButton);
         currentGesture = (TextView)parentView.findViewById(R.id.gestureSelected);
+        selectApp = (Button)parentView.findViewById(R.id.selectAppButton);
 
+        selectApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(),SelectAppActivity.class);
+                getActivity().startActivity(i);
+            }
+        });
 
 
         arrowRight.setOnClickListener(new View.OnClickListener() {
