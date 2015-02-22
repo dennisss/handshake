@@ -6,19 +6,83 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
+
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity{
 
     private BusinessCard mBusinessCard;
-    private final int PICK_CARD = 1;
+    private final int CONFIG_CARD = 1;
+    private final int CONFIG_OTHER_CARD = 2;
+
+    private List<BusinessCard> mBusinessCardList;
+    private BusinessCardAdapter mCardAdapter;
+    private GoogleApiClient mApiClient;
+    private static final String START_ACTIVITY = "/start_activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*
+        BusinessCard.deleteAll(BusinessCard.class);
+        finish();
+*/
+
+/*
+        BusinessCard card = new BusinessCard();
+        card.setName("Bob");
+        card.save();
+
+        BusinessCard card1 = new BusinessCard();
+        card1.setName("Billy");
+        card1.save();
+
+        finish();
+        */
+
+
+        mBusinessCardList = Select.from(BusinessCard.class)
+                .where(Condition.prop("is_you").eq("0")).list();
+                //.list();//.where(Condition.prop("is_you").eq("0")).list();
+
+        mCardAdapter = new BusinessCardAdapter(this,
+                R.layout.business_card_item_row,
+                mBusinessCardList);
+        ListView lvBusinessCards = (ListView) findViewById(R.id.cardsList);
+        lvBusinessCards.setAdapter(mCardAdapter);
+        lvBusinessCards.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getApplicationContext(),AddBusinessCard.class);
+                i.putExtra("card", mBusinessCardList.get(position));
+                i.putExtra("position", position);
+                startActivityForResult(i, CONFIG_OTHER_CARD);
+                return false;
+            }
+        });
+
+
         Button addCard = (Button)findViewById(R.id.addBusinessCard);
+        initGoogleApiClient();
         addCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -26,38 +90,64 @@ public class MainActivity extends ActionBarActivity {
                 if (mBusinessCard != null) {
                     i.putExtra("card", mBusinessCard);
                 }
-                startActivityForResult(i, PICK_CARD);
+
+                startActivityForResult(i, CONFIG_CARD);
             }
         });
+
+        List<BusinessCard> businessCards = Select.from(BusinessCard.class)
+                .where(Condition.prop("is_you").eq("1")).list();
+        if (businessCards.size() > 0) {
+            mBusinessCard = businessCards.get(0);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_CARD && resultCode == RESULT_OK) {
-            mBusinessCard = (BusinessCard) data.getSerializableExtra("card");
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CONFIG_CARD) {
+                BusinessCard newCard = (BusinessCard) data.getSerializableExtra("card");
+                if (mBusinessCard == null)
+                    mBusinessCard = newCard;
+                else
+                    mBusinessCard.setCard(newCard);
+                mBusinessCard.isYou(true);
+                mBusinessCard.save();
+            } else if (requestCode == CONFIG_OTHER_CARD) {
+                int position = data.getIntExtra("position", -1);
+                if (position == -1)
+                    return;
+                BusinessCard newCard = (BusinessCard) data.getSerializableExtra("card");
+                BusinessCard oldCard = mBusinessCardList.get(position);
+                oldCard.setCard(newCard);
+                oldCard.save();
+                mCardAdapter.notifyDataSetChanged();
+            }
         }
     }
 
+    private void initGoogleApiClient() {
+        mApiClient = new GoogleApiClient.Builder( this )
+                .addApi( Wearable.API )
+                .build();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        mApiClient.connect();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
+    private void sendMessage( final String path, final String text ) {
+        new Thread( new Runnable() {
+            @Override
+            public void run() {
+                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes( mApiClient ).await();
+                for(Node node : nodes.getNodes()) {
+                    Wearable.MessageApi.sendMessage( mApiClient, node.getId(), path, text.getBytes() ).await();
+
+                }
+
+            }
+        }).start();
     }
+
 }

@@ -3,54 +3,57 @@ package me.denniss.handshake;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-
 
 public class AddBusinessCard extends ActionBarActivity {
 
     private final int PICK_IMAGE = 1;
-    String imageUri = "";
+    private String imageUri = "";
+    private EditText businessName;
+    private EditText name;
+    private EditText email;
+    private EditText jobTitle;
+    private EditText address;
+    private EditText number;
+    private EditText fax;
+    private EditText website;
+    private Button imageButton;
+    private BusinessCard currentCard;
+    /**
+     * Used for knowing the position of the item when passing back to the main activity.
+     * (If modifying a business card that does not belong to the user)
+     */
+    private int position = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_business_card);
 
-        imageUri = "";
-        final EditText businessName = (EditText)findViewById(R.id.businessName);
-        final EditText name = (EditText)findViewById(R.id.name);
-        final EditText email = (EditText)findViewById(R.id.email);
-        final EditText jobTitle = (EditText)findViewById(R.id.jobTitle);
-        final EditText address = (EditText)findViewById(R.id.address);
-        final EditText number = (EditText)findViewById(R.id.phoneNumber);
-        number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        final EditText fax = (EditText)findViewById(R.id.fax);
-        fax.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        final EditText website = (EditText)findViewById(R.id.website);
-        final Button imageButton = (Button)findViewById(R.id.selectImageButton);
+        businessName = (EditText)findViewById(R.id.businessName);
+        name = (EditText)findViewById(R.id.name);
+        email = (EditText)findViewById(R.id.email);
+        jobTitle = (EditText)findViewById(R.id.jobTitle);
+        address = (EditText)findViewById(R.id.address);
+        number = (EditText)findViewById(R.id.phoneNumber);
+        fax = (EditText)findViewById(R.id.fax);
+        website = (EditText)findViewById(R.id.website);
+        imageButton = (Button)findViewById(R.id.selectImageButton);
 
-        BusinessCard card = (BusinessCard) getIntent().getSerializableExtra("card");
-        if (card != null) {
-            businessName.setText(card.businessName);
-            name.setText(card.name);
-            email.setText(card.email);
-            jobTitle.setText(card.jobTitle);
-            address.setText(card.address);
-            number.setText(card.number);
-            fax.setText(card.fax);
-            website.setText(card.website);
-            imageUri = card.imageUrl;
-        }
+        imageUri = "";
+        number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        fax.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+        currentCard = (BusinessCard) getIntent().getSerializableExtra("card");
+        fillCardFields(currentCard);
+        position = getIntent().getIntExtra("position", -1);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,18 +74,10 @@ public class AddBusinessCard extends ActionBarActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusinessCard card = new BusinessCard();
-                card.businessName = businessName.getText().toString();
-                card.name = name.getText().toString();
-                card.email = email.getText().toString();
-                card.jobTitle = jobTitle.getText().toString();
-                card.address = address.getText().toString();
-                card.number = number.getText().toString();
-                card.fax = fax.getText().toString();
-                card.website = website.getText().toString();
-                card.imageUrl = imageUri;
+                updateBusinessCard();
                 Intent intent = new Intent();
-                intent.putExtra("card", card);
+                intent.putExtra("card", currentCard);
+                intent.putExtra("position",position);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -102,6 +97,7 @@ public class AddBusinessCard extends ActionBarActivity {
     }
 
 
+
     public String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
@@ -115,6 +111,43 @@ public class AddBusinessCard extends ActionBarActivity {
                 cursor.close();
             }
         }
+    }
+
+    /**
+     * Fill the fields of this activity with the values from the given business card
+     * @param card The business card to get values from
+     */
+    public void fillCardFields(BusinessCard card) {
+        if (card == null) {
+            return;
+        }
+        businessName.setText(card.businessName);
+        name.setText(card.name);
+        email.setText(card.email);
+        jobTitle.setText(card.jobTitle);
+        address.setText(card.address);
+        number.setText(card.number);
+        fax.setText(card.fax);
+        website.setText(card.website);
+        imageUri = card.imageUrl;
+    }
+
+    /**
+     * Create a business card from the values in the field
+     */
+    public void updateBusinessCard() {
+        if (currentCard == null)
+            currentCard = new BusinessCard();
+        currentCard.businessName = businessName.getText().toString();
+        currentCard.name = name.getText().toString();
+        currentCard.email = email.getText().toString();
+        currentCard.jobTitle = jobTitle.getText().toString();
+        currentCard.address = address.getText().toString();
+        currentCard.number = number.getText().toString();
+        currentCard.fax = fax.getText().toString();
+        currentCard.website = website.getText().toString();
+        currentCard.imageUrl = imageUri;
+
     }
 
 }

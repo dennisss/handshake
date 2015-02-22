@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.denniss.handshake" >
-
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="Add a business card"
         android:theme="@android:style/Theme.DeviceDefault" >
+
+
+        <service
+            android:name=".MessageListenerService" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".WearActivity"
             android:label="@string/app_name" >
