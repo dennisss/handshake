@@ -134,9 +134,10 @@ public class AddBusinessCard extends ActionBarActivity {
 
     /**
      * Create a business card from the values in the field
-     * @return The new business card
      */
     public void updateBusinessCard() {
+        if (currentCard == null)
+            currentCard = new BusinessCard();
         currentCard.businessName = businessName.getText().toString();
         currentCard.name = name.getText().toString();
         currentCard.email = email.getText().toString();

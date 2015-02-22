@@ -42,8 +42,27 @@ public class MainActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
+        BusinessCard.deleteAll(BusinessCard.class);
+        finish();
+*/
+
+/*
+        BusinessCard card = new BusinessCard();
+        card.setName("Bob");
+        card.save();
+
+        BusinessCard card1 = new BusinessCard();
+        card1.setName("Billy");
+        card1.save();
+
+        finish();
+        */
+
+
         mBusinessCardList = Select.from(BusinessCard.class)
                 .where(Condition.prop("is_you").eq("0")).list();
+                //.list();//.where(Condition.prop("is_you").eq("0")).list();
 
         mCardAdapter = new BusinessCardAdapter(this,
                 R.layout.business_card_item_row,
@@ -92,14 +111,14 @@ public class MainActivity extends ActionBarActivity{
                     mBusinessCard = newCard;
                 else
                     mBusinessCard.setCard(newCard);
+                mBusinessCard.isYou(true);
                 mBusinessCard.save();
             } else if (requestCode == CONFIG_OTHER_CARD) {
                 int position = data.getIntExtra("position", -1);
                 if (position == -1)
                     return;
                 BusinessCard newCard = (BusinessCard) data.getSerializableExtra("card");
-                BusinessCard oldCard = mBusinessCardList.get(0);
-                oldCard.delete();
+                BusinessCard oldCard = mBusinessCardList.get(position);
                 oldCard.setCard(newCard);
                 oldCard.save();
                 mCardAdapter.notifyDataSetChanged();
