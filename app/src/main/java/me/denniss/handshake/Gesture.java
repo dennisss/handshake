@@ -16,20 +16,24 @@ import java.util.Date;
 public class Gesture  implements SensorEventListener{
 
     public enum Type{
-        HANDSHAKE
+        HANDSHAKE,
+        WAVE
     }
 
+    private FeatureExtractor fe = new FeatureExtractor();
+    private Learn learn = new Learn();
 
-    private FloatFFT_1D fft = new FloatFFT_1D(32);
+    private boolean trainMode = false;
+    private boolean predictMode = true;
+
+
 
     private SensorManager sensorManager;
     private Sensor accel;
     private Sensor magn;
     private Sensor gyro;
 
-    private float[] accXBuffer = new float[32];
-    private float[] accYBuffer = new float[32];
-    private float[] accZBuffer = new float[32];
+
 
     private float[] accel_data;
     private float[] gyro_data;
@@ -43,83 +47,33 @@ public class Gesture  implements SensorEventListener{
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
-    /* Add a sample to a rolling buffer (shifting it by one) and return the fft of it */
-    private float[] applySampleFFT(float[] in, float a){
+    /* Set the sensor callback in training mode: append data points to a file */
+    public void trainingState(int label){
+        trainMode = true;
+        predictMode = false;
 
-        // Shift the data
-        for(int i = 1; i < in.length; i++){
-            in[i-1] = in[i];
-        }
-
-
-        in[in.length - 1] = a;
-
-        float[] fftBuf = in.clone();
-        float[] bins = new float[in.length / 2];
-
-        fft.realForward(fftBuf);
-
-        for(int i = 0; i < fftBuf.length; i += 2){
-            float hypot = (float) Math.hypot(fftBuf[i], fftBuf[i+1]);
-
-            bins[i/2] = hypot;
-        }
-
-        return bins;
+        // TODO: Save the label
     }
 
-    /* Find the index of the highest value in an array */
-    private int maxIndex(float[] in){
-        int maxi = 0;
-        float maxval = Float.MIN_VALUE;
-
-        for(int i = 0; i < in.length; i++){
-            if(in[i] > maxval){
-                maxi = i;
-                maxval = in[i];
-            }
-        }
-
-        return maxi;
+    /* Set the sensor callback in prediction mode */
+    public void predictState(){
+        trainMode = false;
+        predictMode = true;
     }
 
 
+    /* Capture the feature to a csv file */
+    public void do_train() {
 
-    private int n = 0;
+
+    }
+
 
     private boolean seqeunce = false;
     private int nshakes = 0;
+    public void do_basic_predict(){
 
-    @Override
-    public final void onSensorChanged(SensorEvent event) {
-
-        n++;
-
-        //if(n % 100 == 0)
-        //    Log.i("gesture", "got some events");
-
-        if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accel_data = event.values;
-
-/*
-            Log.i("gesture", accel_data[0] + " " + accel_data[1] + " " + accel_data[2]);
-
-            float val = (float) (accel_data[0])  + (accel_data[1]) + (accel_data[2]) ;
-
-            Log.i("gesture", Float.toString(val));
-*/
-
-            float[] accXFFT = applySampleFFT(accXBuffer, accel_data[0]);
-            float[] accYFFT = applySampleFFT(accYBuffer, accel_data[1]);
-
-            accXFFT[0] = 0;
-            accYFFT[0] = 0;
-
-            int maxxi = maxIndex(accXFFT);
-            int maxyi = maxIndex(accYFFT);
-
-
-            if(maxyi == 4){
+            if(fe.maxyi == 5){
                 nshakes++;
 
                 if(nshakes > 6 && !seqeunce){
@@ -133,8 +87,48 @@ public class Gesture  implements SensorEventListener{
                 seqeunce = false;
             }
 
-            //Log.i("gesture", Integer.toString(maxyi));
 
+        Log.i("gesture", "" + fe.maxyi);
+
+    }
+
+
+    public void do_predict(){
+
+
+    }
+
+
+
+
+    private int n = 0;
+
+    @Override
+    public final void onSensorChanged(SensorEvent event) {
+
+        n++;
+
+        //if(n % 100 == 0)
+        //    Log.i("gesture", "got some events");
+
+        if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            accel_data = event.values;
+
+            //Log.i("gesture", accel_data[0] + " " + accel_data[1] + " " + accel_data[2]);
+
+/*
+            float val = (float) (accel_data[0])  + (accel_data[1]) + (accel_data[2]) ;
+            Log.i("gesture", Float.toString(val));
+*/
+            fe.update(accel_data);
+
+
+            if(predictMode){
+                do_basic_predict();
+            }
+            else if(trainMode){
+
+            }
 
         }
         if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
@@ -145,10 +139,11 @@ public class Gesture  implements SensorEventListener{
 
     }
 
+
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
-
     }
 
     private void emitGesture(Type t){

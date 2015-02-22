@@ -1,0 +1,9 @@
+{
+	"name": "handshake",
+	"private": true,
+	"dependencies": {
+		"express": "latest",
+		"body-parser": "latest"
+	}
+
+}

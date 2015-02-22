@@ -1,14 +1,17 @@
 package me.denniss.handshake;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.google.android.gms.location.LocationServices;
@@ -16,13 +19,7 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import android.widget.Toast;
-
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.MessageApi;
-import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
@@ -47,6 +44,8 @@ public class MainActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RequestUtil.init(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("businessCardReceived"));
         /*
         BusinessCard.deleteAll(BusinessCard.class);
         finish();
@@ -107,6 +106,26 @@ public class MainActivity extends ActionBarActivity{
         }
     }
 
+
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            BusinessCard message = (BusinessCard)intent.getSerializableExtra("card");
+            if(mBusinessCardList!=null)
+            {
+                mBusinessCardList.add(message);
+                //message.save();
+                mCardAdapter.notifyDataSetChanged();
+            }
+
+        }
+    };
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -118,12 +137,6 @@ public class MainActivity extends ActionBarActivity{
                     mBusinessCard.setCard(newCard);
                 mBusinessCard.isYou(true);
                 mBusinessCard.save();
-                RequestUtil.sendGesture(1, mBusinessCard, new Response.Listener() {
-                    @Override
-                    public void onResponse(Object response) {
-                        Toast.makeText(getApplicationContext(),((JSONObject) response).toString(),Toast.LENGTH_SHORT).show();
-                    }
-                });
 
 
             } else if (requestCode == CONFIG_OTHER_CARD) {
@@ -170,6 +183,14 @@ public class MainActivity extends ActionBarActivity{
 
             }
         }).start();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
     }
 
 }

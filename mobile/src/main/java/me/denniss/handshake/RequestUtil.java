@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 /**
  * Created by Tomer on 2/21/2015.
@@ -36,7 +38,7 @@ public class RequestUtil {
     }
 
 
-    public static void sendGesture(int gesture, BusinessCard card, Response.Listener listener)
+    public static void sendGesture(String gesture, BusinessCard card, Response.Listener listener)
     {
         Bitmap bm = BitmapFactory.decodeFile(card.getImageUrl());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -56,6 +58,18 @@ public class RequestUtil {
             }
             object.put("imageBase64",encodedImage);
             object.put("gesture",gesture);
+            object.put("businessName", card.getBusinessName());
+            object.put("name", card.getName());
+            object.put("email", card.getEmail());
+            object.put("phone", card.getNumber());
+            object.put("fax", card.getFax());
+            object.put("address", card.getAddress());
+            object.put("jobTitle", card.getJobTitle());
+            object.put("website", card.getWebsite());
+            File f = new File(card.getImageUrl());
+
+            object.put("imageName", f.getName());
+
         }catch (JSONException e){}
 
         mRequestQueue.add(new JsonObjectRequest(JsonObjectRequest.Method.POST,"http://r.denniss.me/shake",object,listener,new Response.ErrorListener() {
