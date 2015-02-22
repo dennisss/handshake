@@ -3,6 +3,7 @@ package me.denniss.handshake;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class WearActivity extends Activity {
@@ -22,6 +23,8 @@ public class WearActivity extends Activity {
                 mTextView = (TextView) stub.findViewById(R.id.text);
             }
         });
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         g = new Gesture(this);
     }
