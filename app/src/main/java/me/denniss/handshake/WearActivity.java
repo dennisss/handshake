@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class WearActivity extends Activity{
+public class WearActivity extends Activity implements GestureListener{
 
     private Button listner,startTraining,arrowLeft,arrowRight;
     private GoogleApiClient mApiClient;
@@ -89,7 +89,7 @@ public class WearActivity extends Activity{
                 listner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendMessage( START_ACTIVITY, "1" );
+                        sendMessage( START_ACTIVITY, "1");
                     }
                 });
             }
@@ -100,7 +100,6 @@ public class WearActivity extends Activity{
         g = new Gesture(this);
 
     }
-
 
     private void startedTraining()
     {
@@ -165,5 +164,9 @@ public class WearActivity extends Activity{
     }
 
 
+    @Override
+    public void onGesture(Gesture.Type t) {
+        sendMessage( START_ACTIVITY, Integer.toString((t.ordinal())));
 
+    }
 }
