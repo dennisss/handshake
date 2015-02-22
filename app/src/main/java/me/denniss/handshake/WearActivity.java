@@ -87,7 +87,7 @@ public class WearActivity extends Activity implements GestureListener{
                 listner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendMessage( START_ACTIVITY, "1");
+                        g.predictState();
                     }
                 });
             }
