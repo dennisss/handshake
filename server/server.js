@@ -14,7 +14,7 @@ app.post('/shake', function (req, res) {
 
 	console.log('SHAKE')
 
-	var me = (i++) + "";
+	var me = req.body.name + "";
 	data[me] = req.body;
 
 	function sendother(){

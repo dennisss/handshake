@@ -42,8 +42,10 @@ public class Learn {
 
         for(int i = 0; i < problem.l; i++){
             float[] s = samples.get(i);
+            problem.x[i] = new svm_node[6];
 
             for(int j = 0; j < 6; j++){
+                problem.x[i][j] = new svm_node();
                 problem.x[i][j].value = s[j];
                 problem.x[i][j].index = j+1;
             }
