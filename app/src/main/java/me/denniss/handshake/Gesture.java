@@ -73,7 +73,7 @@ public class Gesture  implements SensorEventListener{
     private int nshakes = 0;
     public void do_basic_predict(){
 
-            if(fe.maxyi == 4){
+            if(fe.maxyi == 5){
                 nshakes++;
 
                 if(nshakes > 6 && !seqeunce){

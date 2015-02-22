@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.post('/shake', function (req, res) {
 	console.log(req.body)
 
-	res.send({la: 'fdfdf'});
+	res.send(req.body);
 })
 
 

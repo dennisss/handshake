@@ -1,7 +1,11 @@
 package me.denniss.handshake;
 
 
+import android.util.Log;
+
 import org.jtransforms.fft.FloatFFT_1D;
+
+import java.util.Date;
 
 /*
     Each sample should have:
@@ -25,14 +29,15 @@ public class FeatureExtractor {
     public int maxyi;
     public int maxzi;
 
-
+    private boolean seqeunce = false;
+    private int nshakes = 0;
     public void update(float[] acc_vec){
 
         this.acc_vec = acc_vec;
 
         float[] accXFFT = applySampleFFT(accXBuffer, acc_vec[0]);
         float[] accYFFT = applySampleFFT(accYBuffer, acc_vec[1]);
-        float[] accZFFT = applySampleFFT(accYBuffer, acc_vec[2]);
+        float[] accZFFT = applySampleFFT(accZBuffer, acc_vec[2]);
 
         accXFFT[0] = 0;
         accYFFT[0] = 0;
