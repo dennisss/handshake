@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.wearable.view.WatchViewStub;
 import android.view.WindowManager;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class WearActivity extends Activity implements GestureListener{
     private static final String START_ACTIVITY = "/start_activity";
     TextView currentGesture;
     int curGestureIndex = 0;
-
+    boolean listeneing = false;
     private Gesture g;
 
 
@@ -87,7 +88,18 @@ public class WearActivity extends Activity implements GestureListener{
                 listner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        g.predictState();
+                        if(!listeneing)
+                        {
+                            g.predictState();
+                            listner.setText("Stop Listening");
+                        }
+                        else
+                        {
+                            g.noState();
+                            listner.setText("Start Listening");
+                        }
+
+                        listeneing = !listeneing;
                     }
                 });
             }
@@ -167,6 +179,7 @@ public class WearActivity extends Activity implements GestureListener{
     @Override
     public void onGesture(Gesture.Type t) {
         sendMessage( START_ACTIVITY, Integer.toString((t.ordinal())));
-
+        Vibrator v = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+        v.vibrate(500);
     }
 }
