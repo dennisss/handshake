@@ -27,9 +27,13 @@ public class WearActivity extends Activity implements GoogleApiClient.Connection
 
     private Button listner;
 
+<<<<<<< HEAD
     private Gesture g = new Gesture();
     private GoogleApiClient mApiClient;
     private static final String START_ACTIVITY = "/start_activity";
+=======
+    private Gesture g;
+>>>>>>> origin/master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class WearActivity extends Activity implements GoogleApiClient.Connection
             }
         });
 
+<<<<<<< HEAD
     }
 
 
@@ -76,6 +81,9 @@ public class WearActivity extends Activity implements GoogleApiClient.Connection
 
             }
         }).start();
+=======
+        g = new Gesture(this);
+>>>>>>> origin/master
     }
 
     @Override
@@ -97,14 +105,22 @@ public class WearActivity extends Activity implements GoogleApiClient.Connection
     protected void onResume() {
         super.onResume();
 
+<<<<<<< HEAD
         //g.start();
+=======
+        g.resume();
+>>>>>>> origin/master
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
+<<<<<<< HEAD
         //g.stop();
+=======
+        g.pause();
+>>>>>>> origin/master
     }
 
 
