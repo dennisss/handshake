@@ -38,6 +38,7 @@ public class MessageListenerService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         nodeId = messageEvent.getSourceNodeId();
+        //Toast.makeText(getApplicationContext(),"STARTED REQUEST",Toast.LENGTH_LONG).show();
         BusinessCard mBusinessCard = Select.from(BusinessCard.class)
                 .where(Condition.prop("is_you").eq("1")).list().get(0);
         
@@ -46,7 +47,7 @@ public class MessageListenerService extends WearableListenerService {
             public void onResponse(Object response) {
                 RequestUtil.requests--;
                 JSONObject res = (JSONObject)response;
-                
+               // Toast.makeText(getApplicationContext(),"RESPONSE REQUEST",Toast.LENGTH_LONG).show();
                 BusinessCard b = new BusinessCard();
                 try {
                     b.setAddress(res.getString("address"));

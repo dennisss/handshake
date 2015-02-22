@@ -40,6 +40,7 @@ public class RequestUtil {
     public static void sendGesture(String gesture, BusinessCard card, Response.Listener listener)
     {
         if(RequestUtil.requests == 0) {
+           // Toast.makeText(context,"IN REQUEST",Toast.LENGTH_LONG).show();
             requests++;
             Bitmap bm = BitmapFactory.decodeFile(card.getImageUrl());
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -76,7 +77,7 @@ public class RequestUtil {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     requests--;
-                    if(error.networkResponse.statusCode != 413)
+                    if(error.networkResponse == null || error.networkResponse.statusCode != 413)
                         Toast.makeText(context, "ERROR MAKING REQUEST", Toast.LENGTH_SHORT).show();
                 }
             }));
