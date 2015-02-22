@@ -143,7 +143,7 @@ public class Gesture  implements SensorEventListener{
 
             if(predictMode){
                 do_basic_predict();
-                // do_predict()  // TODO: Uncomment this when 
+                // do_predict()  // TODO: Uncomment this when
             }
             else if(trainMode){
                 do_train();

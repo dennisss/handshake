@@ -16,6 +16,44 @@ public class Learn {
 
     public void train(ArrayList<float[]> samples /* Note: the final 7th element should be the classification, but they need to be split as x (6 dim) and y (1 dim) */){
 
+        param.kernel_type = svm_parameter.POLY;
+        param.svm_type = svm_parameter.C_SVC;
+        //param.kernel_type = svm_parameter.RBF;
+        param.degree = 3;
+        param.gamma = 0;
+        param.coef0 = 0;
+        param.nu = 0.5;
+        param.cache_size = 40;
+        param.C = 1;
+        param.eps = 1e-3;
+        param.p = 0.1;
+        param.shrinking = 1;
+        param.probability = 0;
+        param.nr_weight = 0;
+        param.weight_label = new int[0];
+        param.weight = new double[0];
+
+
+
+
+        problem.l = samples.size();
+        problem.x = new svm_node[problem.l][];
+        problem.y = new double[problem.l];
+
+        for(int i = 0; i < problem.l; i++){
+            float[] s = samples.get(i);
+
+            for(int j = 0; j < 6; j++){
+                problem.x[i][j].value = s[j];
+                problem.x[i][j].index = j+1;
+            }
+
+            problem.y[i] = s[6];
+        }
+
+
+        model = svm.svm_train(problem, param);
+
         /*
         prob = new svm_problem();
         prob.l = vy.size();
