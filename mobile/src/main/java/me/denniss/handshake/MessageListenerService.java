@@ -44,6 +44,7 @@ public class MessageListenerService extends WearableListenerService {
         RequestUtil.sendGesture(new String(messageEvent.getData()), mBusinessCard, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
+                RequestUtil.requests--;
                 JSONObject res = (JSONObject)response;
                 
                 BusinessCard b = new BusinessCard();

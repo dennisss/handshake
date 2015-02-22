@@ -28,6 +28,7 @@ public class RequestUtil {
     private static RequestQueue mRequestQueue;
     private static Context context;
     public static GoogleApiClient mApiClient;
+    public static int requests = 0;
     public static void init(Context context)
     {
         RequestUtil.context = context;
@@ -38,44 +39,48 @@ public class RequestUtil {
 
     public static void sendGesture(String gesture, BusinessCard card, Response.Listener listener)
     {
-        Bitmap bm = BitmapFactory.decodeFile(card.getImageUrl());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        if(RequestUtil.requests == 0) {
+            requests++;
+            Bitmap bm = BitmapFactory.decodeFile(card.getImageUrl());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 50, baos); //bm is the bitmap object
+            byte[] b = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
 
-        JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject();
 
-        Location l = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
-        try
-        {
-            if(l!=null)
-            {
-                object.put("lat",l.getLatitude());
-                object.put("lon",l.getLongitude());
+            Location l = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
+            try {
+                if (l != null) {
+                    object.put("lat", l.getLatitude());
+                    object.put("lon", l.getLongitude());
+                }
+                object.put("imageBase64", encodedImage);
+                object.put("gesture", gesture);
+                object.put("businessName", card.getBusinessName());
+                object.put("name", card.getName());
+                object.put("email", card.getEmail());
+                object.put("phone", card.getNumber());
+                object.put("fax", card.getFax());
+                object.put("address", card.getAddress());
+                object.put("jobTitle", card.getJobTitle());
+                object.put("website", card.getWebsite());
+                File f = new File(card.getImageUrl());
+
+                object.put("imageName", f.getName());
+
+            } catch (JSONException e) {
             }
-            object.put("imageBase64",encodedImage);
-            object.put("gesture",gesture);
-            object.put("businessName", card.getBusinessName());
-            object.put("name", card.getName());
-            object.put("email", card.getEmail());
-            object.put("phone", card.getNumber());
-            object.put("fax", card.getFax());
-            object.put("address", card.getAddress());
-            object.put("jobTitle", card.getJobTitle());
-            object.put("website", card.getWebsite());
-            File f = new File(card.getImageUrl());
 
-            object.put("imageName", f.getName());
-
-        }catch (JSONException e){}
-
-        mRequestQueue.add(new JsonObjectRequest(JsonObjectRequest.Method.POST,"http://r.denniss.me/shake",object,listener,new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context,"ERROR MAKING REQUEST",Toast.LENGTH_SHORT).show();
-            }
-        }));
+            mRequestQueue.add(new JsonObjectRequest(JsonObjectRequest.Method.POST, "http://r.denniss.me/shake", object, listener, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    requests--;
+                    if(error.networkResponse.statusCode != 413)
+                        Toast.makeText(context, "ERROR MAKING REQUEST", Toast.LENGTH_SHORT).show();
+                }
+            }));
+        }
     }
 
 
