@@ -46,7 +46,7 @@ public class AddBusinessCard extends ActionBarActivity {
         fax = (EditText)findViewById(R.id.fax);
         website = (EditText)findViewById(R.id.website);
         imageButton = (Button)findViewById(R.id.selectImageButton);
-
+        final Button delete = (Button) findViewById(R.id.businessCardDelete);
         imageUri = "";
         number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         fax.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
@@ -54,6 +54,10 @@ public class AddBusinessCard extends ActionBarActivity {
         currentCard = (BusinessCard) getIntent().getSerializableExtra("card");
         fillCardFields(currentCard);
         position = getIntent().getIntExtra("position", -1);
+        if(position == -1)
+        {
+            delete.setVisibility(View.GONE);
+        }
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +74,18 @@ public class AddBusinessCard extends ActionBarActivity {
                 finish();
             }
         });
+
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("position",position);
+                setResult(MainActivity.RESULT_DELETE, intent);
+                finish();
+            }
+        });
+
         Button save = (Button)findViewById(R.id.businessCardSave);
         save.setOnClickListener(new View.OnClickListener() {
             @Override

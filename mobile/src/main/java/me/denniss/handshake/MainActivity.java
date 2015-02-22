@@ -36,6 +36,8 @@ public class MainActivity extends ActionBarActivity{
     private final int CONFIG_CARD = 1;
     private final int CONFIG_OTHER_CARD = 2;
 
+    public static final int RESULT_DELETE=900;
+
     private List<BusinessCard> mBusinessCardList;
     private BusinessCardAdapter mCardAdapter;
     private static final String START_ACTIVITY = "/start_activity";
@@ -134,6 +136,14 @@ public class MainActivity extends ActionBarActivity{
                 oldCard.save();
                 mCardAdapter.notifyDataSetChanged();
             }
+        }
+        else if (resultCode == RESULT_DELETE && requestCode == CONFIG_OTHER_CARD) {
+            int position = data.getIntExtra("position", -1);
+            if (position == -1)
+                return;
+            mBusinessCardList.get(position).delete();
+            mBusinessCardList.remove(position);
+            mCardAdapter.notifyDataSetChanged();
         }
     }
 
