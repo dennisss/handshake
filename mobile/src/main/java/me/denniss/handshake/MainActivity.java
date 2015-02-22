@@ -16,9 +16,17 @@ import com.orm.query.Select;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity{
 
     private BusinessCard mBusinessCard;
     private final int CONFIG_CARD = 1;
@@ -26,6 +34,8 @@ public class MainActivity extends ActionBarActivity {
 
     private List<BusinessCard> mBusinessCardList;
     private BusinessCardAdapter mCardAdapter;
+    private GoogleApiClient mApiClient;
+    private static final String START_ACTIVITY = "/start_activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
 
 
         Button addCard = (Button)findViewById(R.id.addBusinessCard);
+        initGoogleApiClient();
         addCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +71,7 @@ public class MainActivity extends ActionBarActivity {
                 if (mBusinessCard != null) {
                     i.putExtra("card", mBusinessCard);
                 }
+
                 startActivityForResult(i, CONFIG_CARD);
             }
         });
@@ -69,7 +81,6 @@ public class MainActivity extends ActionBarActivity {
         if (businessCards.size() > 0) {
             mBusinessCard = businessCards.get(0);
         }
-
     }
 
     @Override
@@ -94,6 +105,30 @@ public class MainActivity extends ActionBarActivity {
                 mCardAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private void initGoogleApiClient() {
+        mApiClient = new GoogleApiClient.Builder( this )
+                .addApi( Wearable.API )
+                .build();
+
+        mApiClient.connect();
+    }
+
+
+
+    private void sendMessage( final String path, final String text ) {
+        new Thread( new Runnable() {
+            @Override
+            public void run() {
+                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes( mApiClient ).await();
+                for(Node node : nodes.getNodes()) {
+                    Wearable.MessageApi.sendMessage( mApiClient, node.getId(), path, text.getBytes() ).await();
+
+                }
+
+            }
+        }).start();
     }
 
 }

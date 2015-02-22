@@ -12,12 +12,6 @@ android {
         versionCode 1
         versionName "1.0"
 
-        ndk {
-            moduleName "gesture"
-            //cFlags "-DANDROID_NDK -D_DEBUG DNULL=0"   // Define some macros
-            //ldLibs "EGL", "GLESv3", "dl", "log"       // Link with these libraries!
-            //stl "stlport_shared"
-        }
     }
     buildTypes {
         release {
@@ -31,4 +25,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.android.support:wearable:1.1.0'
     compile 'com.google.android.gms:play-services-wearable:6.5.87'
+
 }
