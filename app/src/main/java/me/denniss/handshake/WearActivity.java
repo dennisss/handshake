@@ -23,17 +23,14 @@ import com.google.android.gms.wearable.Wearable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class WearActivity extends Activity implements GoogleApiClient.ConnectionCallbacks{
+public class WearActivity extends Activity{
 
     private Button listner;
-
-<<<<<<< HEAD
-    private Gesture g = new Gesture();
     private GoogleApiClient mApiClient;
     private static final String START_ACTIVITY = "/start_activity";
-=======
+
     private Gesture g;
->>>>>>> origin/master
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +51,8 @@ public class WearActivity extends Activity implements GoogleApiClient.Connection
                 });
             }
         });
+        g = new Gesture(this);
 
-<<<<<<< HEAD
     }
 
 
@@ -81,46 +78,22 @@ public class WearActivity extends Activity implements GoogleApiClient.Connection
 
             }
         }).start();
-=======
-        g = new Gesture(this);
->>>>>>> origin/master
     }
-
-    @Override
-   public void onConnected(android.os.Bundle bundle)
-    {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i)
-    {
-
-    }
-
 
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
-<<<<<<< HEAD
-        //g.start();
-=======
         g.resume();
->>>>>>> origin/master
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-<<<<<<< HEAD
-        //g.stop();
-=======
         g.pause();
->>>>>>> origin/master
+
     }
 
 
