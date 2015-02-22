@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationServices;
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
+import java.util.Collections;
 import java.util.List;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Node;
@@ -67,7 +68,7 @@ public class MainActivity extends ActionBarActivity{
         mBusinessCardList = Select.from(BusinessCard.class)
                 .where(Condition.prop("is_you").eq("0")).list();
                 //.list();//.where(Condition.prop("is_you").eq("0")).list();
-
+        Collections.reverse(mBusinessCardList);
         mCardAdapter = new BusinessCardAdapter(this,
                 R.layout.business_card_item_row,
                 mBusinessCardList);
@@ -115,7 +116,7 @@ public class MainActivity extends ActionBarActivity{
             BusinessCard message = (BusinessCard)intent.getSerializableExtra("card");
             if(mBusinessCardList!=null)
             {
-                mBusinessCardList.add(0,message);
+                mBusinessCardList.add(0, message);
                 //message.save();
                 mCardAdapter.notifyDataSetChanged();
             }
