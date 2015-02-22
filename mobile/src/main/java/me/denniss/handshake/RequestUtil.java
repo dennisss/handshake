@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -23,9 +24,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-/**
- * Created by Tomer on 2/21/2015.
- */
 public class RequestUtil {
     private static RequestQueue mRequestQueue;
     private static Context context;
@@ -80,14 +78,6 @@ public class RequestUtil {
         }));
     }
 
-    public static void getStuff(Response.Listener listener)
-    {
 
-        mRequestQueue.add(new JsonObjectRequest("http://echo.jsontest.com/key/value/one/two",null,listener,new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context,"ERROR MAKING REQUEST",Toast.LENGTH_SHORT).show();
-            }
-        }));
-    }
+
 }
