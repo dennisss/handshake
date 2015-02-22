@@ -69,6 +69,7 @@ public class MainActivity extends ActionBarActivity{
                 .where(Condition.prop("is_you").eq("0")).list();
                 //.list();//.where(Condition.prop("is_you").eq("0")).list();
         Collections.reverse(mBusinessCardList);
+
         mCardAdapter = new BusinessCardAdapter(this,
                 R.layout.business_card_item_row,
                 mBusinessCardList);
