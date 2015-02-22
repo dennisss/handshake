@@ -27,4 +27,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-wearable:6.5.87'
     compile files('libs/JTransforms-3.0.jar')
     compile files('libs/JLargeArrays-1.2.jar')
+    compile files('libs/libsvm.jar')
 }
