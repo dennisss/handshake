@@ -3,13 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context=".WearActivity" tools:deviceIds="wear_round">
 
-
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/wearTrainingButton"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/wearListeningButton"
+    android:text="Start Listening"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/wearListeningButton"
+        android:id="@+id/wearTrainingButton"
         android:layout_centerInParent="true"
-        android:text="Start Listening"/>
+        android:text="Start training"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/wearTrainingButton"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="40dp"
+            android:text="&lt;"
+            android:id="@+id/gestureLeftButton"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/gestureSelected"
+            android:layout_margin="10dp"
+            android:textSize="30sp"/>
+        <Button
+            android:layout_width="40dp"
+            android:text="&gt;"
+            android:id="@+id/gestureRightButton"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
 
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.wearable.view.WatchViewStub;
 import android.view.WindowManager;
 import android.util.Log;
@@ -23,13 +24,17 @@ import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class WearActivity extends Activity{
 
-    private Button listner;
+    private Button listner,startTraining,arrowLeft,arrowRight;
     private GoogleApiClient mApiClient;
     private static final String START_ACTIVITY = "/start_activity";
+    TextView currentGesture;
+    int curGestureIndex = 0;
 
     private Gesture g;
 
@@ -45,6 +50,39 @@ public class WearActivity extends Activity{
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
                  listner = (Button)findViewById(R.id.wearListeningButton);
+                startTraining = (Button)findViewById(R.id.wearTrainingButton);
+                arrowLeft = (Button)findViewById(R.id.gestureLeftButton);
+                arrowRight = (Button)findViewById(R.id.gestureRightButton);
+                currentGesture = (TextView)findViewById(R.id.gestureSelected);
+
+                arrowRight.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        curGestureIndex++;
+                        currentGesture.setText(Integer.toString(curGestureIndex));
+                    }
+                });
+
+                arrowLeft.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        curGestureIndex--;
+                        currentGesture.setText(Integer.toString(curGestureIndex));
+                    }
+                });
+
+                startTraining.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                startedTraining();
+                            }
+                        }, 2000);
+                    }
+                });
+
                 listner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -60,6 +98,24 @@ public class WearActivity extends Activity{
 
     }
 
+
+    private void startedTraining()
+    {
+        Toast.makeText(getApplicationContext(),"STARTED TRAINING!",Toast.LENGTH_SHORT).show();
+        //do stuff here
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                stopTraining();
+            }
+        }, 10000);
+    }
+
+    private void stopTraining()
+    {
+        Toast.makeText(getApplicationContext(),"STOPPED TRAINING!",Toast.LENGTH_SHORT).show();
+    }
 
     private void initGoogleApiClient() {
         mApiClient = new GoogleApiClient.Builder( this )
