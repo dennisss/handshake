@@ -50,33 +50,38 @@ public class Gesture  implements SensorEventListener{
 
     public void noState(){
         if(trainMode){
-            // Save data
-            // TRAIN!
-            // Save model
+            datac.save_data();
+            learn.train(datac.samples);
+            learn.save_model();
         }
 
         trainMode = false;
         predictMode = false;
     }
 
+    private int curlabel;
+
     /* Set the sensor callback in training mode: append data points to a file */
     public void trainingState(int label){
         trainMode = true;
         predictMode = false;
 
-        // TODO: Save the label
+        curlabel = label;
     }
 
     /* Set the sensor callback in prediction mode */
     public void predictState(){
         trainMode = false;
-        predictMode = false;
+        predictMode = true;
     }
 
 
     /* Capture the feature to a csv file */
     public void do_train() {
 
+        float[] sample = fe.getVector(curlabel);
+
+        datac.add_sample(sample);
 
     }
 
@@ -108,6 +113,7 @@ public class Gesture  implements SensorEventListener{
     public void do_predict(){
 
 
+
     }
 
 
@@ -137,6 +143,7 @@ public class Gesture  implements SensorEventListener{
 
             if(predictMode){
                 do_basic_predict();
+                // do_predict()  // TODO: Uncomment this when 
             }
             else if(trainMode){
                 do_train();
