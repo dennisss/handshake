@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
-<<<<<<< HEAD
 import android.view.WindowManager;
-=======
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
->>>>>>> f480141cd82e01dd036ab3385e60654d8662c99e
+
 import android.widget.TextView;
 import android.widget.Toast;
 

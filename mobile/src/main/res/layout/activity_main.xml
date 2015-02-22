@@ -1,25 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
     android:orientation="vertical"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+     tools:context=".MainActivity">
 
     <Button
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/addBusinessCard"
         android:text="Configure My Business Card"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My cards"/>
-
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:dividerHeight="0dp"
+        android:divider="@android:color/transparent"
         android:id="@+id/cardsList"/>
 
 </LinearLayout>
