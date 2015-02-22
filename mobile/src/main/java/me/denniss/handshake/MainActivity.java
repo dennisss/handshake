@@ -116,7 +116,7 @@ public class MainActivity extends ActionBarActivity{
                     mBusinessCard.setCard(newCard);
                 mBusinessCard.isYou(true);
                 mBusinessCard.save();
-                RequestUtil.sendGesture(1,new Response.Listener() {
+                RequestUtil.sendGesture(1, mBusinessCard, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         Toast.makeText(getApplicationContext(),((JSONObject) response).toString(),Toast.LENGTH_SHORT).show();

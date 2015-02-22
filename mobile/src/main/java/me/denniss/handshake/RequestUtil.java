@@ -1,7 +1,10 @@
 package me.denniss.handshake;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.util.Base64;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -15,6 +18,8 @@ import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Tomer on 2/21/2015.
@@ -31,9 +36,16 @@ public class RequestUtil {
     }
 
 
-    public static void sendGesture(int gesture, Response.Listener listener)
+    public static void sendGesture(int gesture, BusinessCard card, Response.Listener listener)
     {
+        Bitmap bm = BitmapFactory.decodeFile(card.getImageUrl());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 50, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
         JSONObject object = new JSONObject();
+
         Location l = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
         try
         {
@@ -41,8 +53,8 @@ public class RequestUtil {
             {
                 object.put("lat",l.getLatitude());
                 object.put("lon",l.getLongitude());
-
             }
+            object.put("imageBase64",encodedImage);
             object.put("gesture",gesture);
         }catch (JSONException e){}
 
