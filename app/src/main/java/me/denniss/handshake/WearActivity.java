@@ -75,8 +75,6 @@ public class WearActivity extends Activity implements GestureListener{
                     @Override
                     public void onClick(View v) {
 
-                        g.trainingState(curGestureIndex);
-
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
@@ -104,7 +102,9 @@ public class WearActivity extends Activity implements GestureListener{
     private void startedTraining()
     {
         Toast.makeText(getApplicationContext(),"STARTED TRAINING!",Toast.LENGTH_SHORT).show();
-        //do stuff here
+
+        g.trainingState(curGestureIndex);
+
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
