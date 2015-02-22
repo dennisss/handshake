@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.android.volley.Response;
+import com.google.android.gms.location.LocationServices;
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
@@ -25,6 +27,8 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
+import org.json.JSONObject;
+
 
 public class MainActivity extends ActionBarActivity{
 
@@ -34,14 +38,13 @@ public class MainActivity extends ActionBarActivity{
 
     private List<BusinessCard> mBusinessCardList;
     private BusinessCardAdapter mCardAdapter;
-    private GoogleApiClient mApiClient;
     private static final String START_ACTIVITY = "/start_activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        RequestUtil.init(this);
         /*
         BusinessCard.deleteAll(BusinessCard.class);
         finish();
@@ -113,6 +116,14 @@ public class MainActivity extends ActionBarActivity{
                     mBusinessCard.setCard(newCard);
                 mBusinessCard.isYou(true);
                 mBusinessCard.save();
+                RequestUtil.sendGesture(1,new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        Toast.makeText(getApplicationContext(),((JSONObject) response).toString(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             } else if (requestCode == CONFIG_OTHER_CARD) {
                 int position = data.getIntExtra("position", -1);
                 if (position == -1)
@@ -127,11 +138,12 @@ public class MainActivity extends ActionBarActivity{
     }
 
     private void initGoogleApiClient() {
-        mApiClient = new GoogleApiClient.Builder( this )
+        RequestUtil.mApiClient = new GoogleApiClient.Builder( this )
                 .addApi( Wearable.API )
+                .addApi(LocationServices.API)
                 .build();
 
-        mApiClient.connect();
+        RequestUtil.mApiClient.connect();
     }
 
 
@@ -140,9 +152,9 @@ public class MainActivity extends ActionBarActivity{
         new Thread( new Runnable() {
             @Override
             public void run() {
-                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes( mApiClient ).await();
+                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes( RequestUtil.mApiClient ).await();
                 for(Node node : nodes.getNodes()) {
-                    Wearable.MessageApi.sendMessage( mApiClient, node.getId(), path, text.getBytes() ).await();
+                    Wearable.MessageApi.sendMessage( RequestUtil.mApiClient, node.getId(), path, text.getBytes() ).await();
 
                 }
 
