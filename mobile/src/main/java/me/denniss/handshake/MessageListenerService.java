@@ -9,7 +9,11 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.orm.query.Condition;
 import com.orm.query.Select;
@@ -21,13 +25,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Tomer on 2/21/2015.
  */
 
 public class MessageListenerService extends WearableListenerService {
-
+    private static final String START_ACTIVITY = "/start_activity";
     String nodeId;
 
     @Override
@@ -84,6 +89,7 @@ public class MessageListenerService extends WearableListenerService {
                 // You can also include some extra data.
                 intent.putExtra("card",b );
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                sendMessage(START_ACTIVITY,"success");
                 //Toast.makeText(getApplicationContext(), ((JSONObject) response).toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -96,8 +102,28 @@ public class MessageListenerService extends WearableListenerService {
        // showToast(new String(messageEvent.getData()));
     }
 
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+    private void sendMessage( final String path, final String text ) {
+        new Thread( new Runnable() {
+            @Override
+            public void run() {
+                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes( RequestUtil.mApiClient ).await();
+                for(Node node : nodes.getNodes()) {
+                    Wearable.MessageApi.sendMessage( RequestUtil.mApiClient, node.getId(), path, text.getBytes() ).await();
+
+                }
+
+            }
+        }).start();
+    }
+
+    private void reply(String message) {
+        GoogleApiClient client = new GoogleApiClient.Builder(getApplicationContext())
+                .addApi(Wearable.API)
+                .build();
+       // client.blockingConnect(1000, TimeUnit.MILLISECONDS);
+        Wearable.MessageApi.sendMessage(client, nodeId, message, null);
+        client.disconnect();
     }
 
 }

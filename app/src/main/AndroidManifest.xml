@@ -13,7 +13,9 @@
         android:label="Add a business card"
         android:theme="@android:style/Theme.DeviceDefault" >
 
-
+        <activity
+            android:name="android.support.wearable.activity.ConfirmationActivity">
+        </activity>
         <service
             android:name=".MessageListenerService" >
             <intent-filter>
