@@ -50,11 +50,11 @@ public class FeatureExtractor {
 
     }
 
-
-    /* Get a 6-dimensional sample vector */
-    public float[] getVector(){
-        return new float[]{ acc_vec[0], acc_vec[1], acc_vec[2], maxxi, maxyi, maxzi };
+    /* Get a 6-dimensional +1 label sample vector */
+    public float[] getVector(int label){
+        return new float[]{ acc_vec[0], acc_vec[1], acc_vec[2], maxxi, maxyi, maxzi, label };
     }
+
 
 
     /* Add a sample to a rolling buffer (shifting it by one) and return the fft of it */

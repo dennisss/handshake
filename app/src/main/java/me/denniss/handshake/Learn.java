@@ -14,7 +14,7 @@ public class Learn {
     private svm_model model;
 
 
-    public void train(ArrayList<float[]> samples /* Note: the final 7th element should be the classification */){
+    public void train(ArrayList<float[]> samples /* Note: the final 7th element should be the classification, but they need to be split as x (6 dim) and y (1 dim) */){
 
         /*
         prob = new svm_problem();
@@ -75,16 +75,14 @@ public class Learn {
 
     public float predict(float[] sample){
 
-
         svm_node[] x = new svm_node[6];
 
+        for(int i = 0; i < 6; i++){
+            x[i].value = sample[i];
 
-        //svn
+        }
 
-        //double res = svm.svm_predict(model, );
-
-
-        return 0;
+        return (float)svm.svm_predict(model, x);
     }
 
 
