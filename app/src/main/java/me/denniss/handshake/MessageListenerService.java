@@ -31,4 +31,7 @@ public class MessageListenerService extends WearableListenerService {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+
+
+
 }

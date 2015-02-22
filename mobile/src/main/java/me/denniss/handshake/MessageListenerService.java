@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.orm.query.Condition;
@@ -30,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class MessageListenerService extends WearableListenerService {
-
+    private static final String START_ACTIVITY = "/start_activity";
     String nodeId;
 
     @Override
@@ -87,7 +89,7 @@ public class MessageListenerService extends WearableListenerService {
                 // You can also include some extra data.
                 intent.putExtra("card",b );
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-                //reply("connected");
+                sendMessage(START_ACTIVITY,"success");
                 //Toast.makeText(getApplicationContext(), ((JSONObject) response).toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -98,6 +100,21 @@ public class MessageListenerService extends WearableListenerService {
 
 
        // showToast(new String(messageEvent.getData()));
+    }
+
+
+    private void sendMessage( final String path, final String text ) {
+        new Thread( new Runnable() {
+            @Override
+            public void run() {
+                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes( RequestUtil.mApiClient ).await();
+                for(Node node : nodes.getNodes()) {
+                    Wearable.MessageApi.sendMessage( RequestUtil.mApiClient, node.getId(), path, text.getBytes() ).await();
+
+                }
+
+            }
+        }).start();
     }
 
     private void reply(String message) {
