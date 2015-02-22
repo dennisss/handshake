@@ -118,6 +118,7 @@ public class MainActivity extends ActionBarActivity{
                 mBusinessCardList.add(0,message);
                 //message.save();
                 mCardAdapter.notifyDataSetChanged();
+                sendMessage(START_ACTIVITY,"success");
             }
 
         }

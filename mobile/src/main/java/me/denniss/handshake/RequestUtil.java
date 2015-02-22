@@ -70,7 +70,7 @@ public class RequestUtil {
 
         }catch (JSONException e){}
 
-        mRequestQueue.add(new JsonObjectRequest(JsonObjectRequest.Method.POST,"http://r.denniss.me/shake",object,listener,new Response.ErrorListener() {
+        mRequestQueue.add(new JsonObjectRequest(JsonObjectRequest.Method.POST,"http://r.denniss.me/echo",object,listener,new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context,"ERROR MAKING REQUEST",Toast.LENGTH_SHORT).show();
