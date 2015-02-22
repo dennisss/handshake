@@ -1,14 +1,20 @@
 package me.denniss.handshake;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import libsvm.*;
 
 
 public class Learn {
+    private static final String MODEL_FILE = "/sdcard/model.txt";
+
     private svm_problem problem = new svm_problem();
     private svm_parameter param = new svm_parameter();
     private svm_model model;
 
-    public void train(float[][] samples){
+
+    public void train(ArrayList<float[]> samples /* Note: the final 7th element should be the classification */){
 
         /*
         prob = new svm_problem();
@@ -48,6 +54,22 @@ public class Learn {
 
         */
 
+    }
+
+    public void load_model(){
+        try {
+            model = svm.svm_load_model(MODEL_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void save_model(){
+        try {
+            svm.svm_save_model(MODEL_FILE, model);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

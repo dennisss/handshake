@@ -74,6 +74,9 @@ public class WearActivity extends Activity{
                 startTraining.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        g.trainingState(curGestureIndex);
+
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
@@ -114,6 +117,10 @@ public class WearActivity extends Activity{
 
     private void stopTraining()
     {
+        g.noState();
+
+        // Save data
+
         Toast.makeText(getApplicationContext(),"STOPPED TRAINING!",Toast.LENGTH_SHORT).show();
     }
 

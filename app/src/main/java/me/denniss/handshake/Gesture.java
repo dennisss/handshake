@@ -22,6 +22,7 @@ public class Gesture  implements SensorEventListener{
 
     private FeatureExtractor fe = new FeatureExtractor();
     private Learn learn = new Learn();
+    private DataCollect datac = new DataCollect();
 
     private boolean trainMode = false;
     private boolean predictMode = true;
@@ -47,6 +48,17 @@ public class Gesture  implements SensorEventListener{
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
+    public void noState(){
+        if(trainMode){
+            // Save data
+            // TRAIN!
+            // Save model
+        }
+
+        trainMode = false;
+        predictMode = false;
+    }
+
     /* Set the sensor callback in training mode: append data points to a file */
     public void trainingState(int label){
         trainMode = true;
@@ -58,7 +70,7 @@ public class Gesture  implements SensorEventListener{
     /* Set the sensor callback in prediction mode */
     public void predictState(){
         trainMode = false;
-        predictMode = true;
+        predictMode = false;
     }
 
 
@@ -127,7 +139,7 @@ public class Gesture  implements SensorEventListener{
                 do_basic_predict();
             }
             else if(trainMode){
-
+                do_train();
             }
 
         }
