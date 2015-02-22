@@ -25,6 +25,12 @@ public class AddBusinessCard extends ActionBarActivity {
     private EditText fax;
     private EditText website;
     private Button imageButton;
+    private BusinessCard currentCard;
+    /**
+     * Used for knowing the position of the item when passing back to the main activity.
+     * (If modifying a business card that does not belong to the user)
+     */
+    private int position = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +51,9 @@ public class AddBusinessCard extends ActionBarActivity {
         number.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         fax.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        BusinessCard card = (BusinessCard) getIntent().getSerializableExtra("card");
-        fillCardFields(card);
+        currentCard = (BusinessCard) getIntent().getSerializableExtra("card");
+        fillCardFields(currentCard);
+        position = getIntent().getIntExtra("position", -1);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,9 +74,10 @@ public class AddBusinessCard extends ActionBarActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusinessCard card = getBusinessCard();
+                updateBusinessCard();
                 Intent intent = new Intent();
-                intent.putExtra("card", card);
+                intent.putExtra("card", currentCard);
+                intent.putExtra("position",position);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -128,19 +136,17 @@ public class AddBusinessCard extends ActionBarActivity {
      * Create a business card from the values in the field
      * @return The new business card
      */
-    public BusinessCard getBusinessCard() {
-        BusinessCard card = new BusinessCard();
-        card.businessName = businessName.getText().toString();
-        card.name = name.getText().toString();
-        card.email = email.getText().toString();
-        card.jobTitle = jobTitle.getText().toString();
-        card.address = address.getText().toString();
-        card.number = number.getText().toString();
-        card.fax = fax.getText().toString();
-        card.website = website.getText().toString();
-        card.imageUrl = imageUri;
-        card.isYou(true);
-        return card;
+    public void updateBusinessCard() {
+        currentCard.businessName = businessName.getText().toString();
+        currentCard.name = name.getText().toString();
+        currentCard.email = email.getText().toString();
+        currentCard.jobTitle = jobTitle.getText().toString();
+        currentCard.address = address.getText().toString();
+        currentCard.number = number.getText().toString();
+        currentCard.fax = fax.getText().toString();
+        currentCard.website = website.getText().toString();
+        currentCard.imageUrl = imageUri;
+
     }
 
 }

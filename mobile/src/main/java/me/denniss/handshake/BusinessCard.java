@@ -24,6 +24,20 @@ public class BusinessCard extends SugarRecord<BusinessCard> implements Serializa
     // Getters
     // ---------------------------------------------
 
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public String getBusinessName() { return businessName; }
+    public String getJobTitle() { return jobTitle; }
+    public String getAddress() { return address; }
+    public String getNumber() { return number; }
+    public String getFax() { return fax; }
+    public String getWebsite() { return website; }
+    public String getImageUrl() { return imageUrl; }
+    
+    /**
+     * Returns whether or not this is the user's business card
+     * @return true if this is the user's business card
+     */
     public boolean isYou() {
         return isYou;
     }
@@ -32,6 +46,20 @@ public class BusinessCard extends SugarRecord<BusinessCard> implements Serializa
     // Setters
     // ---------------------------------------------
 
+    public void setName(String name) { this.name = name; }
+    public void setEmail(String email) { this.email = email; }
+    public void setBusinessName(String businessName) { this.businessName = businessName; }
+    public void setJobTitle(String jobTitle) { this.jobTitle = jobTitle; }
+    public void setAddress(String address) { this.address = address; }
+    public void setNumber(String number) { this.number = number; }
+    public void setFax(String fax) { this.fax = fax; }
+    public void setWebsite(String website) { this.website = website; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    
+    /**
+     * Set whether or not this is the users business card
+     * @param isYou Whether or not this is the user's business card
+     */
     public void isYou(boolean isYou) {
         this.isYou = isYou;
     }
@@ -41,14 +69,14 @@ public class BusinessCard extends SugarRecord<BusinessCard> implements Serializa
      * @param card The card to copy information from
      */
     public void setCard(BusinessCard card) {
-        name = card.name;
-        email = card.email;
-        businessName = card.businessName;
-        jobTitle = card.jobTitle;
-        address = card.address;
-        number = card.number;
-        fax = card.fax;
-        website = card.website;
-        imageUrl = card.imageUrl;
+        setName(card.getName());
+        setEmail(card.getEmail());
+        setBusinessName(card.getBusinessName());
+        setJobTitle(card.getJobTitle());
+        setAddress(card.getAddress());
+        setNumber(card.getNumber());
+        setFax(card.getFax());
+        setWebsite(card.getWebsite());
+        setImageUrl(card.getImageUrl());
     }
 }
