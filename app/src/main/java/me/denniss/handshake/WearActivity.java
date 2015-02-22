@@ -89,7 +89,7 @@ public class WearActivity extends Activity{
                 listner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendMessage( START_ACTIVITY, "MESSAGE" );
+                        sendMessage( START_ACTIVITY, "1" );
                     }
                 });
             }

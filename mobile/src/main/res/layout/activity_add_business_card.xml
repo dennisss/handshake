@@ -96,11 +96,22 @@
             android:text="Cancel"/>
 
         <Button
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:id="@+id/businessCardSave"
             android:layout_height="wrap_content"
             android:text="Save"/>
+
+        <Button
+            android:layout_marginLeft="20dp"
+            android:id="@+id/businessCardDelete"
+            android:text="Delete"
+            android:visibility="visible"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         </LinearLayout>
     
 </LinearLayout>
