@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/watch_view_stub"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    app:rectLayout="@layout/rect_activity_wear" app:roundLayout="@layout/round_activity_wear"
+    app:rectLayout="@layout/rect_activity_wear" app:roundLayout="@layout/gesture_fragment"
     tools:context=".WearActivity"
     tools:deviceIds="wear">
 
