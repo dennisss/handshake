@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity{
             BusinessCard message = (BusinessCard)intent.getSerializableExtra("card");
             if(mBusinessCardList!=null)
             {
-                mBusinessCardList.add(message);
+                mBusinessCardList.add(0,message);
                 //message.save();
                 mCardAdapter.notifyDataSetChanged();
             }
