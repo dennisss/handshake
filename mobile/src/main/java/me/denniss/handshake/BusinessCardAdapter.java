@@ -36,24 +36,24 @@ public class BusinessCardAdapter extends ArrayAdapter<BusinessCard> {
         }
         
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-        tvName.setText(data.get(position).name);
+        tvName.setText(data.get(position).getName());
         TextView tvEmail = (TextView) convertView.findViewById(R.id.tvEmail);
-        tvEmail.setText(data.get(position).email);
+        tvEmail.setText(data.get(position).getEmail());
         TextView tvBusinessName = (TextView) convertView.findViewById(R.id.tvBusinessName);
-        tvBusinessName.setText(data.get(position).businessName);
+        tvBusinessName.setText(data.get(position).getBusinessName());
         TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tvJobTitle);
-        tvJobTitle.setText(data.get(position).jobTitle);
+        tvJobTitle.setText(data.get(position).getJobTitle());
         TextView tvAddress = (TextView) convertView.findViewById(R.id.tvAddress);
-        tvAddress.setText(data.get(position).address);
+        tvAddress.setText(data.get(position).getAddress());
         TextView tvNumber = (TextView) convertView.findViewById(R.id.tvNumber);
-        tvNumber.setText(data.get(position).number);
+        tvNumber.setText(data.get(position).getNumber());
         TextView tvFax = (TextView) convertView.findViewById(R.id.tvFax);
-        tvFax.setText(data.get(position).fax);
+        tvFax.setText(data.get(position).getFax());
         TextView tvWebsite = (TextView) convertView.findViewById(R.id.tvWebsite);
-        tvWebsite.setText(data.get(position).website);
+        tvWebsite.setText(data.get(position).getWebsite());
         ImageView ivUser = (ImageView) convertView.findViewById(R.id.ivUser);
         if (data.get(position).getImageUrl() != null)
-            ivUser.setImageURI(Uri.parse(data.get(position).imageUrl));
+            ivUser.setImageURI(Uri.parse(data.get(position).getImageUrl()));
 
         return convertView;
     }

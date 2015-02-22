@@ -8,15 +8,15 @@ import java.io.Serializable;
  * Created by Tomer on 2/21/2015.
  */
 public class BusinessCard extends SugarRecord<BusinessCard> implements Serializable{
-    public String name;
-    public String email;
-    public String businessName;
-    public String jobTitle;
-    public String address;
-    public String number;
-    public String fax;
-    public String website;
-    public String imageUrl;
+    private String name;
+    private String email;
+    private String businessName;
+    private String jobTitle;
+    private String address;
+    private String number;
+    private String fax;
+    private String website;
+    private String imageUrl;
 
     private boolean isYou = false;
 

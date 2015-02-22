@@ -121,15 +121,15 @@ public class AddBusinessCard extends ActionBarActivity {
         if (card == null) {
             return;
         }
-        businessName.setText(card.businessName);
-        name.setText(card.name);
-        email.setText(card.email);
-        jobTitle.setText(card.jobTitle);
-        address.setText(card.address);
-        number.setText(card.number);
-        fax.setText(card.fax);
-        website.setText(card.website);
-        imageUri = card.imageUrl;
+        businessName.setText(card.getBusinessName());
+        name.setText(card.getName());
+        email.setText(card.getEmail());
+        jobTitle.setText(card.getJobTitle());
+        address.setText(card.getAddress());
+        number.setText(card.getNumber());
+        fax.setText(card.getFax());
+        website.setText(card.getWebsite());
+        imageUri = card.getImageUrl();
     }
 
     /**
@@ -138,16 +138,15 @@ public class AddBusinessCard extends ActionBarActivity {
     public void updateBusinessCard() {
         if (currentCard == null)
             currentCard = new BusinessCard();
-        currentCard.businessName = businessName.getText().toString();
-        currentCard.name = name.getText().toString();
-        currentCard.email = email.getText().toString();
-        currentCard.jobTitle = jobTitle.getText().toString();
-        currentCard.address = address.getText().toString();
-        currentCard.number = number.getText().toString();
-        currentCard.fax = fax.getText().toString();
-        currentCard.website = website.getText().toString();
-        currentCard.imageUrl = imageUri;
-
+        currentCard.setBusinessName(businessName.getText().toString());
+        currentCard.setName(name.getText().toString());
+        currentCard.setEmail(email.getText().toString());
+        currentCard.setJobTitle(jobTitle.getText().toString());
+        currentCard.setAddress(address.getText().toString());
+        currentCard.setNumber(number.getText().toString());
+        currentCard.setFax(fax.getText().toString());
+        currentCard.setWebsite(website.getText().toString());
+        currentCard.setImageUrl(imageUri);
     }
 
 }
