@@ -88,7 +88,7 @@ public class WearActivity extends Activity implements GestureListener{
                 listner.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        sendMessage(START_ACTIVITY,"1");
+                        //sendMessage(START_ACTIVITY,"1");
                         if(!listeneing)
                         {
                             g.predictState();
@@ -110,6 +110,8 @@ public class WearActivity extends Activity implements GestureListener{
 
         g = new Gesture(this);
         g.addGestureListener(this);
+
+        g.noState();
     }
 
     private void startedTraining()
@@ -179,8 +181,8 @@ public class WearActivity extends Activity implements GestureListener{
 
     @Override
     public void onGesture(Gesture.Type t) {
-      //  sendMessage( START_ACTIVITY, Integer.toString((t.ordinal())));
-      //  Vibrator v = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-      //  v.vibrate(500);
+        sendMessage( START_ACTIVITY, Integer.toString((t.ordinal())));
+       Vibrator v = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+       v.vibrate(500);
     }
 }

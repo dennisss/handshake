@@ -93,7 +93,7 @@ public class Gesture  implements SensorEventListener{
             if(fe.maxyi == 5 || fe.maxyi == 4){
                 nshakes++;
 
-                if(nshakes > 6 && !seqeunce){
+                if(nshakes > 8 && !seqeunce){
                     Log.i("gesture", "HANDSHAKE " + (new Date()));
                     this.emitGesture(Type.HANDSHAKE);
                     seqeunce = true;
